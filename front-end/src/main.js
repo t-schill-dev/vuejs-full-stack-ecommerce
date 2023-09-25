@@ -4,6 +4,7 @@ import * as VueRouter from "vue-router";
 import ShoppingCartPage from "./pages/ShoppingCartPage.vue";
 import ProductsPage from "./pages/ProductsPage.vue";
 import ProductDetailPage from "./pages/ProductDetailPage.vue";
+import "./main.css";
 
 createApp(App)
   .use(
