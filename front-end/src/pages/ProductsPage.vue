@@ -3,8 +3,8 @@
   <div class="grid-wrap">
     <div 
     class="product-item"
-    v-bind:key="product.id"
     v-for="product in products" 
+    :key="product.id"
     >
     <img :src="product.imageName" />
     <h3 class="product-name">{{ product.name }}</h3>
