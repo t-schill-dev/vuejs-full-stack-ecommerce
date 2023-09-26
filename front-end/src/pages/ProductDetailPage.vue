@@ -1,4 +1,7 @@
 <template>
+  <router-link to="/products">
+    <button class="back-button">Back</button>
+  </router-link>
   <div class="img-wrap">
     <img :src="product.imageName" />
   </div>

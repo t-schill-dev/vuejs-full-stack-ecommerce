@@ -186,3 +186,6 @@ h1 {
   flex: 1;
   margin: auto;
 }
+.back-button {
+  margin-top: 10px;
+}
