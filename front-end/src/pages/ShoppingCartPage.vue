@@ -17,13 +17,14 @@
 </template>
 
 <script>
+//eslint-disable-next-line
 import { cartItems } from '../temp-data';
 
 export default {
   name: "ShoppingCartPage",
   data() {
     return {
-      cartItems,
+      cartItems: [],
     }
   }
 }
