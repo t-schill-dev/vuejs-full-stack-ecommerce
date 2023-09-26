@@ -80,11 +80,14 @@ h1 {
   margin-top: 16px;
 }
 
+<<<<<<< HEAD
 .sign-in {
   width: 100%;
   margin-top: 16px;
 }
 
+=======
+>>>>>>> 01_08_b
 .price {
   position: absolute;
   top: 24px;
@@ -97,7 +100,10 @@ h1 {
 
 .grey-button {
   background-color: #888;
+<<<<<<< HEAD
   width: 100%;
+=======
+>>>>>>> 01_08_b
 }
 
 .nav-bar {
@@ -126,6 +132,7 @@ h1 {
   margin: 0;
 }
 
+<<<<<<< HEAD
 .nav-buttons-wrap {
   position: absolute;
   right: 16px;
@@ -138,6 +145,8 @@ h1 {
   top: 16px;
 }
 
+=======
+>>>>>>> 01_08_b
 .cart-link {
   position: absolute;
   right: 16px;
@@ -146,7 +155,11 @@ h1 {
 
 .grid-wrap {
   display: flex;
+<<<<<<< HEAD
   justify-content: flex-start;
+=======
+  justify-content: start;
+>>>>>>> 01_08_b
   gap: 16px;
   flex-wrap: wrap;
   margin-top: 16px;
