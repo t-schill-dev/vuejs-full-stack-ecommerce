@@ -1,6 +1,6 @@
 {
   "extensions": [
-    "GitHub.github-vscode-theme",
+    // "GitHub.github-vscode-theme",
     "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint",
     "ritwickdey.LiveServer",
