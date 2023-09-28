@@ -12,7 +12,7 @@ async function start() {
   const app = express();
   app.use(express.json()); //parse request body when body undefined
 
-  app.get("/products", async (req, res) => {
+  app.get("/api/products", async (req, res) => {
     const products = await db.collection("products").find({}).toArray();
     res.json(products);
   });
@@ -24,7 +24,7 @@ async function start() {
     );
   }
 
-  app.get("/users/:userId/cart", async (req, res) => {
+  app.get("/api/users/:userId/cart", async (req, res) => {
     const userId = req.params.userId;
 
     const user = await db.collection("users").findOne({ id: userId });
@@ -32,13 +32,13 @@ async function start() {
     res.json(populatedCart);
   });
 
-  app.get("/products/:productId", async (req, res) => {
+  app.get("/api/products/:productId", async (req, res) => {
     const productId = req.params.productId;
     const product = await db.collection("products").findOne({ id: productId });
     res.json(product);
   });
 
-  app.post("/users/:userId/cart", async (req, res) => {
+  app.post("/api/users/:userId/cart", async (req, res) => {
     const userId = req.params.userId;
     const productId = req.body.id;
 
@@ -55,7 +55,7 @@ async function start() {
     res.json(populatedCart);
   });
 
-  app.delete("/users/:userId/cart/:productId", async (req, res) => {
+  app.delete("/api/users/:userId/cart/:productId", async (req, res) => {
     const productId = req.params.productId;
     const userId = req.params.userId;
 
