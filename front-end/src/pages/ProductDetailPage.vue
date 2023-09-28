@@ -32,9 +32,9 @@ export default {
     NotFoundPage
   },
   async created() {
-const response = await axios.get(`api/products/${this.route.params.productId}`)
-const product = response.data;
-this.product = product;
+    const response = await axios.get(`api/products/${this.route.params.productId}`)
+    const product = response.data;
+    this.product = product;
   }
 }
 </script>
