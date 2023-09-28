@@ -56,14 +56,20 @@ async function start() {
 
     const updatedUser = await db.collection("users").findOne({ id: userId });
     const populatedCart = await populateCartIds(updatedUser.cartItems);
-    console.log(updatedUser.cartItems);
     res.json(populatedCart);
   });
 
-  app.delete("/cart/:productId", (req, res) => {
+  app.delete("/users/:userId/cart/:productId", async (req, res) => {
     const productId = req.params.productId;
-    cartItems = cartItems.filter((id) => id !== productId);
-    const populatedCart = populateCartIds(cartItems);
+    const userId = req.params.userId;
+
+    await db
+      .collection("users")
+      .updateOne({ id: userId }, { $pull: { cartItems: productId } });
+
+    const updatedUser = await db.collection("users").findOne({ id: userId });
+    const populatedCart = populateCartIds(updatedUser.cartItems);
+    console.log("Updated ids: ", updatedUser.cartItems);
     res.json(populatedCart);
   });
 
