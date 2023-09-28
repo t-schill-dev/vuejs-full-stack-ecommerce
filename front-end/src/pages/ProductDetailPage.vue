@@ -4,7 +4,7 @@
     <button class="back-button">Back</button>
   </router-link>
   <div class="img-wrap">
-    <img :src="product.imageName" />
+    <img :src="product.imageUrl" />
   </div>
   <div class="product-details">
     <h1>{{ product.name }}</h1>
@@ -18,18 +18,23 @@
 </template>
 
 <script>
-import { products } from '../temp-data';
 import NotFoundPage from './NotFoundPage.vue';
+import axios from 'axios'
 
 export default {
   name: "ProductDetailPage",
   data() {
     return {
-      product: products.find(product => product.id === this.$route.params.productId),
+      product: {},
     }
   },
   components: {
     NotFoundPage
   },
+  async created() {
+const response = await axios.get(`api/products/${this.route.params.productId}`)
+const product = response.data;
+this.product = product;
+  }
 }
 </script>

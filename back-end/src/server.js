@@ -1,6 +1,7 @@
 //Entry point backend
 import express, { json } from "express";
 import { MongoClient } from "mongodb";
+import path from "path";
 
 async function start() {
   const url = `mongodb+srv://adminVueFSA:608850@cluster0.804umgd.mongodb.net/`;
@@ -11,6 +12,8 @@ async function start() {
 
   const app = express();
   app.use(express.json()); //parse request body when body undefined
+
+  app.use("/images", express.static(path.join(__dirname, "../assets")));
 
   app.get("/api/products", async (req, res) => {
     const products = await db.collection("products").find({}).toArray();

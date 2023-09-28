@@ -7,8 +7,6 @@
 import ProductsList from '../components/ProductsList.vue';
 import axios from 'axios';
 
-
-
 export default {
   name: "ProductsPage",
   components: {
