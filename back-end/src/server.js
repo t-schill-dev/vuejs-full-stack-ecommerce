@@ -1,10 +1,6 @@
 //Entry point backend
 import express, { json } from "express";
 import { MongoClient } from "mongodb";
-import { cartItems as cartItemRaw, products as productsRaw } from "./temp-data";
-
-let cartItems = cartItemRaw;
-let products = productsRaw;
 
 async function start() {
   const url = `mongodb+srv://adminVueFSA:608850@cluster0.804umgd.mongodb.net/`;
