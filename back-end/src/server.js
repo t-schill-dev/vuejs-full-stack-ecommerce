@@ -7,7 +7,7 @@ let cartItems = cartItemRaw;
 let products = productsRaw;
 
 async function start() {
-  const url = `mongodb+srv://adminVueFSA:PW@cluster0.804umgd.mongodb.net/`;
+  const url = `mongodb+srv://adminVueFSA:608850@cluster0.804umgd.mongodb.net/`;
   const client = new MongoClient(url);
 
   await client.connect();
@@ -17,20 +17,21 @@ async function start() {
   app.use(express.json()); //parse request body when body undefined
 
   app.get("/products", async (req, res) => {
-    const products = await db.collection("users").find({}).toArray();
+    const products = await db.collection("products").find({}).toArray();
     res.json(products);
   });
 
   async function populateCartIds(ids) {
+    console.log("The ids are: ", ids);
     return Promise.all(
       ids.map((id) => db.collection("products").findOne({ id }))
     );
   }
 
   app.get("/users/:userId/cart", async (req, res) => {
-    const user = await db
-      .collection("users")
-      .findOne({ id: req.params.userId });
+    const userId = req.params.userId;
+
+    const user = await db.collection("users").findOne({ id: userId });
     const populatedCart = await populateCartIds(user.cartItems);
     res.json(populatedCart);
   });
@@ -41,10 +42,21 @@ async function start() {
     res.json(product);
   });
 
-  app.post("/cart", (req, res) => {
+  app.post("/users/:userId/cart", async (req, res) => {
+    const userId = req.params.userId;
     const productId = req.body.id;
-    cartItems.push(productId);
-    const populatedCart = populateCartIds(cartItems);
+
+    if (productId === null) {
+      console.error("The provided Id is null");
+    }
+    // Update User
+    await db
+      .collection("users")
+      .updateOne({ id: userId }, { $addToSet: { cartItems: productId } }); // does not add duplicates
+
+    const updatedUser = await db.collection("users").findOne({ id: userId });
+    const populatedCart = await populateCartIds(updatedUser.cartItems);
+    console.log(updatedUser.cartItems);
     res.json(populatedCart);
   });
 
