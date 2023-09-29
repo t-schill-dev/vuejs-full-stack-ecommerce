@@ -5,13 +5,20 @@
           <h3>{{ product.name }}</h3>
           <p>{{ product.price }}</p>
         </div>
-        <button class="remove-button">Remove from Cart</button>
+        <!-- Emit sends event to parent on click whil parent listens-->
+        <button 
+          @click="$emit('remove-from-cart', product.id)" 
+          class="remove-button"
+          >
+          Remove from Cart
+        </button>
     </div>
 </template>
 
 <script>
 export default {
   name: "ShoppingCartList",
+  emits: ["remove-from-cart"],
   props: ['products'],
 }
 </script>
