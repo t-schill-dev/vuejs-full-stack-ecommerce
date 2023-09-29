@@ -1,6 +1,7 @@
 <template>
   <h1>Products</h1>
- <ProductsList :products="products"/> //Props passing
+ <!-- Props passing -->
+  <ProductsList :products="products"/>
 </template>
 
 <script>
@@ -15,12 +16,18 @@ export default {
   data() {
     return {
       products: [],
+      cartItems: {}
     }
   },
   async created() {
-    const response = await axios.get("/api/products");
-    const products = response.data;
+    const prodRes = await axios.get("/api/products");
+    const cartRes = await axios.get("/api/users/12345/cart");
+
+    const products = prodRes.data;
+    const cartItems = cartRes.data;
     this.products = products;
+    this.cartItems = cartItems;
+    
   }
 }
 </script>

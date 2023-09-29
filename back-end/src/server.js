@@ -21,10 +21,12 @@ async function start() {
   });
 
   async function populateCartIds(ids) {
-    console.log("The ids are: ", ids);
-    return Promise.all(
+    const products = Promise.all(
       ids.map((id) => db.collection("products").findOne({ id }))
     );
+    if (products !== null) {
+      return products;
+    }
   }
 
   app.get("/api/users/:userId/cart", async (req, res) => {
@@ -68,7 +70,7 @@ async function start() {
       .updateOne({ id: userId }, { $pull: { cartItems: productId } });
 
     const updatedUser = await db.collection("users").findOne({ id: userId });
-    const populatedCart = populateCartIds(updatedUser.cartItems);
+    const populatedCart = await populateCartIds(updatedUser.cartItems);
     console.log("Updated ids: ", updatedUser.cartItems);
     res.json(populatedCart);
   });
