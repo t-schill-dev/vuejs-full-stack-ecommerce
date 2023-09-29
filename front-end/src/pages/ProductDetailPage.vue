@@ -9,7 +9,8 @@
   <div class="product-details">
     <h1>{{ product.name }}</h1>
     <h3 class="price">{{ product.price }}</h3>
-    <button @click="addToCart" class="add-to-cart">Add to cart</button>
+    <button v-if="!isItemInCart" @click="addToCart" class="add-to-cart">Add to cart</button>
+    <button class="grey-button" :disabled="isItemInCart" v-if="isItemInCart">Item is already in cart</button>
   </div>
   </div>
   <div v-else>
@@ -26,21 +27,34 @@ export default {
   data() {
     return {
       product: {},
+      cartItems: [],
+    }
+  },
+  computed: {
+    isItemInCart() {
+      return this.cartItems.some(item => item.id === this.$route.params.productId)
     }
   },
   methods: {
-async addToCart() {
-  await axios.post("/api/users/12345/cart", {id: this.$route.params.productId});
-  alert("Successfully added item to cart");
-}
+    async addToCart() {
+      await axios.post("/api/users/12345/cart", {id: this.$route.params.productId});
+      alert("Successfully added item to cart");
+      const cartRes = await axios.get("/api/users/12345/cart");
+      const cartItems = cartRes.data;
+      this.cartItems = cartItems;
+    }
   },
   components: {
     NotFoundPage
   },
-  async created() {
-    const response = await axios.get(`/api/products/${this.$route.params.productId}`)
-    const product = response.data;
-    this.product = product;
+    async created() {
+      const prodRes = await axios.get(`/api/products/${this.$route.params.productId}`)
+      const cartRes = await axios.get("/api/users/12345/cart");
+
+      const product = prodRes.data;
+      const cartItems = cartRes.data;
+      this.product = product;
+      this.cartItems = cartItems;
   }
 }
 </script>

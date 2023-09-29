@@ -16,18 +16,13 @@ export default {
   data() {
     return {
       products: [],
-      cartItems: {}
+      cartItems: []
     }
   },
-  async created() {
-    const prodRes = await axios.get("/api/products");
-    const cartRes = await axios.get("/api/users/12345/cart");
-
-    const products = prodRes.data;
-    const cartItems = cartRes.data;
-    this.products = products;
-    this.cartItems = cartItems;
-    
-  }
+    async created() {
+      const response = await axios.get('/api/products');
+      const products = response.data;
+      this.products = products;
+    }
 }
 </script>
