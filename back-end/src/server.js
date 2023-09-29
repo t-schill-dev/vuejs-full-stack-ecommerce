@@ -41,6 +41,7 @@ async function start() {
     res.json(product);
   });
 
+  // Adding item to cart
   app.post("/api/users/:userId/cart", async (req, res) => {
     const userId = req.params.userId;
     const productId = req.body.id;
