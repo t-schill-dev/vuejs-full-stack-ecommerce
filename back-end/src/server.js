@@ -33,7 +33,7 @@ async function start() {
     const userId = req.params.userId;
 
     const user = await db.collection("users").findOne({ id: userId });
-    const populatedCart = await populateCartIds(user.cartItems);
+    const populatedCart = await populateCartIds(user?.cartItems || []);
     res.json(populatedCart);
   });
 
@@ -57,7 +57,7 @@ async function start() {
       .updateOne({ id: userId }, { $addToSet: { cartItems: productId } }); // does not add duplicates
 
     const updatedUser = await db.collection("users").findOne({ id: userId });
-    const populatedCart = await populateCartIds(updatedUser.cartItems);
+    const populatedCart = await populateCartIds(updateduser?.cartItems || []);
     res.json(populatedCart);
   });
 
@@ -70,7 +70,7 @@ async function start() {
       .updateOne({ id: userId }, { $pull: { cartItems: productId } });
 
     const updatedUser = await db.collection("users").findOne({ id: userId });
-    const populatedCart = await populateCartIds(updatedUser.cartItems);
+    const populatedCart = await populateCartIds(updateduser?.cartItems || []);
     res.json(populatedCart);
   });
 

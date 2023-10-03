@@ -9,9 +9,9 @@
   <div class="product-details">
     <h1>{{ product.name }}</h1>
     <h3 class="price">{{ product.price }}</h3>
-    <button v-if="!isItemInCart" @click="addToCart" class="add-to-cart">Add to cart</button>
-    <button class="grey-button" :disabled="isItemInCart" v-if="isItemInCart">Item is already in cart</button>
-    <button class="sign-in" @click="signIn">Sign in to add to cart</button>
+    <button v-if="user && !isItemInCart" @click="addToCart" class="add-to-cart">Add to cart</button>
+    <button class="grey-button" :disabled="user && isItemInCart" v-if="isItemInCart">Item is already in cart</button>
+    <button class="sign-in" @click="signIn" v-if="!user">Sign in to add to cart</button>
   </div>
   </div>
   <div v-else>
@@ -23,9 +23,9 @@
 import { getAuth, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth';
 import NotFoundPage from './NotFoundPage.vue';
 import axios from 'axios';
-// import Urls from '../utils/urlParams';
+import Urls from '../utils/urlParams';
 
-// const productPage = Urls.productPage;
+const productPage = Urls.productPage;
 
 export default {
   name: "ProductDetailPage",
@@ -35,9 +35,20 @@ export default {
       cartItems: [],
     }
   },
+  props : ['user'],
   computed: {
     isItemInCart() {
       return this.cartItems.some(item => item.id === this.$route.params.productId)
+    }
+  },
+  watch: {
+    async user(newUserValue){
+      if(newUserValue){
+        
+          const cartRes = await axios.get(`/api/users/${newUserValue.uid}/cart`);
+          const cartItems = cartRes.data;
+          this.cartItems = cartItems;
+      }
     }
   },
   methods: {
@@ -52,7 +63,7 @@ export default {
       const email = prompt('Please enter your E-Mail to sign in');
       const auth = getAuth();
       const actionCodeSettings = {
-        url: `http://localhost:8080/products/${this.$route.params.productId}`,
+        url: `${productPage}/${this.$route.params.productId}`,
         handleCodeInApp: true,
       }
       await sendSignInLinkToEmail(auth, email, actionCodeSettings);
@@ -76,9 +87,12 @@ export default {
       const product = prodRes.data;
       this.product = product;
       
-      const cartRes = await axios.get("/api/users/12345/cart");
-      const cartItems = cartRes.data;
-      this.cartItems = cartItems;
+      if(this.user) {
+        const cartRes = await axios.get(`/api/users/${this.user.uid}/cart`);
+        const cartItems = cartRes.data;
+        this.cartItems = cartItems;
+      }
+      
   }
 }
 </script>
