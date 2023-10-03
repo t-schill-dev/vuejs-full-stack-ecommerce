@@ -7,6 +7,20 @@ import ProductsPage from "./pages/ProductsPage.vue";
 import ProductDetailPage from "./pages/ProductDetailPage.vue";
 import NotFoundPage from "./pages/NotFoundPage.vue";
 import "./main.css";
+import { initializeApp } from "firebase/app";
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBzSK2jrz9GjoPkJRDAsRRyifGIfAlwLfw",
+  authDomain: "vue-ecommerce-app-37b11.firebaseapp.com",
+  projectId: "vue-ecommerce-app-37b11",
+  storageBucket: "vue-ecommerce-app-37b11.appspot.com",
+  messagingSenderId: "1040888104838",
+  appId: "1:1040888104838:web:fa07a64434ff13bbe08e07",
+};
+
+// Initialize Firebase
+initializeApp(firebaseConfig);
 
 createApp(App)
   .use(
