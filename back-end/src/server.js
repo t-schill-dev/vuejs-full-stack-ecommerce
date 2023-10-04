@@ -4,7 +4,7 @@ import { MongoClient } from "mongodb";
 import path from "path";
 
 async function start() {
-  const url = `mongodb+srv://adminVueFSA:608850@cluster0.804umgd.mongodb.net/`;
+  const url = process.env.MONGODB_URL;
   const client = new MongoClient(url);
 
   await client.connect();
@@ -79,8 +79,10 @@ async function start() {
     res.json(populatedCart);
   });
 
-  app.listen(8000, () => {
-    console.log("Server is listening on port 8000");
+  const port = process.env.PORT || 8000;
+
+  app.listen(port, () => {
+    console.log("Server is listening on port" + port);
   });
 }
 

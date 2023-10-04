@@ -1,6 +1,8 @@
+const baseUrl = process.env.API_URL;
+
 const Urls = {
-  baseUrl: "http://localhost:8080",
-  productPage: "http://localhost:8080/products",
+  baseUrl: `${baseUrl}`,
+  productPage: `${baseUrl}/product`,
 };
 
 export default Urls;

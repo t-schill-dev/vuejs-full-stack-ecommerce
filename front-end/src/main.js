@@ -29,7 +29,7 @@ createApp(App)
       routes: [
         {
           path: "/",
-          component: ProductsPage,
+          redirect: "/products",
         },
         {
           path: "/cart",
