@@ -10,7 +10,7 @@
     <h1>{{ product.name }}</h1>
     <h3 class="price">{{ product.price }}</h3>
     <button v-if="user && !isItemInCart" @click="addToCart" class="add-to-cart">Add to cart</button>
-    <button class="grey-button" :disabled="user && isItemInCart" v-if="isItemInCart">Item is already in cart</button>
+    <button class="grey-button" v-if="user && isItemInCart">Item is already in cart</button>
     <button class="sign-in" @click="signIn" v-if="!user">Sign in to add to cart</button>
   </div>
   </div>
@@ -29,35 +29,39 @@ const productPage = Urls.productPage;
 
 export default {
   name: "ProductDetailPage",
+  props: ['user'],
   data() {
     return {
       product: {},
       cartItems: [],
     }
   },
-  props : ['user'],
   computed: {
     isItemInCart() {
+      console.log('is cartItems and array?', this.cartItems);
       return this.cartItems.some(item => item.id === this.$route.params.productId)
     }
   },
   watch: {
     async user(newUserValue){
       if(newUserValue){
-        
-          const cartRes = await axios.get(`/api/users/${newUserValue.uid}/cart`);
-          const cartItems = cartRes.data;
-          this.cartItems = cartItems;
+          // this.fetchCartItems(newUserValue.uid);
+          const cartResponse = await axios.get(`/api/users/${newUserValue.uid}/cart`);
+        const cartItems = cartResponse.data;
+        this.cartItems = cartItems;
       }
     }
   },
   methods: {
+    // async fetchCartItems(userId){
+    //   const cartRes = await axios.get(`/api/users/${userId}/cart`);
+    //   console.log('cartRes.data:', cartRes.data);
+    //   const cartItems = cartRes.data;
+    //   this.cartItems = cartItems;
+    // },
     async addToCart() {
-      await axios.post("/api/users/12345/cart", {id: this.$route.params.productId});
+      await axios.post(`/api/users/${this.user.uid}/cart`, {id: this.$route.params.productId});
       alert("Successfully added item to cart");
-      const cartRes = await axios.get("/api/users/12345/cart");
-      const cartItems = cartRes.data;
-      this.cartItems = cartItems;
     },
     async signIn(){
       const email = prompt('Please enter your E-Mail to sign in');

@@ -21,12 +21,7 @@ async function start() {
   });
 
   async function populateCartIds(ids) {
-    const products = Promise.all(
-      ids.map((id) => db.collection("products").findOne({ id }))
-    );
-    if (products !== null) {
-      return products;
-    }
+    Promise.all(ids.map((id) => db.collection("products").findOne({ id })));
   }
 
   app.get("/api/users/:userId/cart", async (req, res) => {
@@ -51,13 +46,22 @@ async function start() {
     if (productId === null) {
       console.error("The provided Id is null");
     }
-    // Update User
+    // Find existing user and add if not existing
+    const existingUser = await db.collection("users").findOne({ id: userId });
+
+    if (!existingUser) {
+      await db
+        .collection("users")
+        .insertOne({ id: userId }, { $addToSet: { cartItems: productId } });
+    }
+
+    // Update user if found
     await db
       .collection("users")
       .updateOne({ id: userId }, { $addToSet: { cartItems: productId } }); // does not add duplicates
 
     const updatedUser = await db.collection("users").findOne({ id: userId });
-    const populatedCart = await populateCartIds(updateduser?.cartItems || []);
+    const populatedCart = await populateCartIds(updatedUser?.cartItems || []);
     res.json(populatedCart);
   });
 
@@ -70,7 +74,7 @@ async function start() {
       .updateOne({ id: userId }, { $pull: { cartItems: productId } });
 
     const updatedUser = await db.collection("users").findOne({ id: userId });
-    const populatedCart = await populateCartIds(updateduser?.cartItems || []);
+    const populatedCart = await populateCartIds(updatedUser?.cartItems || []);
     res.json(populatedCart);
   });
 
