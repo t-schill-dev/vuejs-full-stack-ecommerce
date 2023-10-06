@@ -4,7 +4,7 @@ import { MongoClient } from "mongodb";
 import path from "path";
 
 async function start() {
-  const url = process.env.MONGODB_URL;
+  const url = process.env.MONGODB_URI;
   const client = new MongoClient(url);
 
   await client.connect();
