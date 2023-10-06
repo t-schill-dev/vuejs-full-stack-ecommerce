@@ -5,7 +5,9 @@ import path from "path";
 
 async function start() {
   const url = process.env.MONGODB_URI;
-  const client = new MongoClient(url);
+  const client = new MongoClient(
+    `mongodb+srv://adminVueFSA:608850@cluster0.804umgd.mongodb.net/`
+  );
 
   await client.connect();
   const db = client.db("fsv-db");
