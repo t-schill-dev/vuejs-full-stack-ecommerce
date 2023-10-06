@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "description": "backend holding api to return products and user",
   "scripts": {
-    "start": "node index.js",
-    "dev": "npx  nodemon --exec npx babel-node src/index.js"
+    "start": "npx  nodemon --exec npx babel-node src/index.js"
   },
   "keywords": [],
   "author": "",

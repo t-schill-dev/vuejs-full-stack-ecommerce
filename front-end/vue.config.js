@@ -2,6 +2,6 @@ const { defineConfig } = require("@vue/cli-service");
 module.exports = defineConfig({
   transpileDependencies: true,
   devServer: {
-    proxy: "https://vue-ecommerce-backend.cyclic.app",
+    proxy: "https://vue-ecom-backend.cyclic.app",
   },
 });
