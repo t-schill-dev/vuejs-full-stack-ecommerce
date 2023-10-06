@@ -1,10 +1,9 @@
 {
   "name": "back-end",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "backend holding api to return products and user",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
     "dev": "npx  nodemon --exec npx babel-node src/index.js"
   },
   "keywords": [],
