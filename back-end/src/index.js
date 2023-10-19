@@ -9,7 +9,8 @@ async function start() {
 
   const port = process.env.PORT || 8000;
 
-  const uri = "mongodb+srv://adminVueFSA:608850@cluster0.804umgd.mongodb.net";
+  const uri = process.env.MONGODB_URI;
+  console.log("My url is", uri);
   const client = new MongoClient(uri);
 
   await client.connect();
