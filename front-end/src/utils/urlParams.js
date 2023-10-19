@@ -1,4 +1,4 @@
-const baseUrl = process.env.API_URL;
+const baseUrl = "https://fullstack-vue-deployment.onrender.com";
 
 const Urls = {
   baseUrl: `${baseUrl}`,
