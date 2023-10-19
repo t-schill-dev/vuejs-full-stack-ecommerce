@@ -15,6 +15,14 @@ async function start() {
 
   app.use("/images", express.static(path.join(__dirname, "../assets")));
 
+  //Render FE statically
+  app.use(
+    express.static(path.resolve(__dirname, "../dist"), {
+      maxAge: "1y",
+      etag: false,
+    })
+  );
+
   app.get("/api/products", async (req, res) => {
     const products = await db.collection("products").find({}).toArray();
     res.json(products);
@@ -78,6 +86,11 @@ async function start() {
     const populatedCart = await populateCartIds(updatedUser?.cartItems || []);
     res.json(populatedCart);
   });
+
+  // Send back index for every endpoint not handled
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../dist/index.html'))
+  })
 
   const port = process.env.PORT || 8000;
 
