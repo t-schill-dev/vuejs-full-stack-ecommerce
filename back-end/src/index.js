@@ -4,16 +4,17 @@ import { MongoClient } from "mongodb";
 import path from "path";
 
 async function start() {
-  const url = process.env.MONGODB_URI;
-  console.log("My url is", url);
-  // const url = "mongodb+srv://adminVueFSA:608850@cluster0.804umgd.mongodb.net";
-  const client = new MongoClient(url);
+  const app = express();
+  app.use(express.json()); //parse request body when body undefined
+
+  const port = process.env.PORT || 8000;
+
+  const uri = process.env.MONGODB_URI;
+  alert("My url is", uri);
+  const client = new MongoClient(uri);
 
   await client.connect();
   const db = client.db("fsv-db");
-
-  const app = express();
-  app.use(express.json()); //parse request body when body undefined
 
   app.use("/images", express.static(path.join(__dirname, "../assets")));
 
@@ -27,7 +28,7 @@ async function start() {
 
   app.get("/api/products", async (req, res) => {
     const products = await db.collection("products").find({}).toArray();
-    res.json(products);
+    res.send(products);
   });
 
   async function populateCartIds(ids) {
@@ -93,8 +94,6 @@ async function start() {
   app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "../dist/index.html"));
   });
-
-  const port = process.env.PORT || 8000;
 
   app.listen(port, () => {
     console.log("Server is listening on port" + port);
