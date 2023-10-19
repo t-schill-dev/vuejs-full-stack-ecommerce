@@ -1,4 +1,4 @@
-const baseUrl = "https://vue-fullstack-ecommerce.netlify.app";
+const baseUrl = "https://vue-ecom-backend.cyclic.app";
 
 const Urls = {
   baseUrl: `${baseUrl}`,

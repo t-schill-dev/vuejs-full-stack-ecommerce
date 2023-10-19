@@ -10,7 +10,7 @@ async function start() {
   const port = process.env.PORT || 8000;
 
   const uri = process.env.MONGODB_URI;
-  alert("My url is", uri);
+  console.log("My url is", uri);
   const client = new MongoClient(uri);
 
   await client.connect();
