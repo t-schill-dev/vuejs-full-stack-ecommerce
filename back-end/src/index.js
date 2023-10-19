@@ -9,12 +9,27 @@ async function start() {
 
   const port = process.env.PORT || 8000;
 
-  const uri = process.env.MONGODB_URI;
-  console.log("My url is", uri);
-  const client = new MongoClient(uri);
+  const db = async () => {
+    try {
+      const client = await new MongoClient(process.env.MONGODB_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      }).connect();
 
-  await client.connect();
-  const db = client.db("fsv-db");
+      client.db("fsv-db");
+      console.log(`MongoDB Connected: ${client.connection.host}`);
+    } catch (error) {
+      console.log(error);
+      process.exit(1);
+    }
+  };
+
+  // const uri = process.env.MONGODB_URI;
+  // console.log("My url is", uri);
+  // const client = new MongoClient(uri);
+
+  // await client.connect();
+  // const db = client.db("fsv-db");
 
   app.use("/images", express.static(path.join(__dirname, "../assets")));
 
@@ -96,7 +111,7 @@ async function start() {
   });
 
   app.listen(port, () => {
-    console.log("Server is listening on port" + port);
+    console.log("Server is listening on port " + port);
   });
 }
 
