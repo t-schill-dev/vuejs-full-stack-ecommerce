@@ -5,6 +5,8 @@ import path from "path";
 
 async function start() {
   const url = process.env.MONGODB_URI;
+  console.log("My url is", url);
+  // const url = "mongodb+srv://adminVueFSA:608850@cluster0.804umgd.mongodb.net";
   const client = new MongoClient(url);
 
   await client.connect();
@@ -88,9 +90,9 @@ async function start() {
   });
 
   // Send back index for every endpoint not handled
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../dist/index.html'))
-  })
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../dist/index.html"));
+  });
 
   const port = process.env.PORT || 8000;
 

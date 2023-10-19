@@ -1,4 +1,4 @@
-const baseUrl = "https://fullstack-vue-deployment.onrender.com";
+const baseUrl = "https://vue-fullstack-ecommerce.netlify.app";
 
 const Urls = {
   baseUrl: `${baseUrl}`,
