@@ -1,4 +1,4 @@
-const baseUrl = "https://vue-ecom-backend.cyclic.app";
+const baseUrl = "https://fullstack-vue-deployment.onrender.com";
 
 const Urls = {
   baseUrl: `${baseUrl}`,
