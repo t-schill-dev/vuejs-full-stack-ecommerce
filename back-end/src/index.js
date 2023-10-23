@@ -3,6 +3,10 @@ import express, { json } from "express";
 import { MongoClient } from "mongodb";
 import path from "path";
 
+//Importing .env file for credentials
+import { config } from "dotenv";
+config({ path: "../.env" });
+
 async function start() {
   const app = express();
   app.use(express.json()); //parse request body when body undefined
@@ -11,25 +15,16 @@ async function start() {
 
   const db = async () => {
     try {
-      const client = await new MongoClient(process.env.MONGODB_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      }).connect();
+      const client = await new MongoClient(process.env.MONGODB_URI).connect();
 
-      client.db("fsv-db");
-      console.log(`MongoDB Connected: ${client.connection.host}`);
+      const database = client.db("fsv-db");
+      console.log("MongoDB Connected");
+      return database;
     } catch (error) {
       console.log(error);
       process.exit(1);
     }
   };
-
-  // const uri = process.env.MONGODB_URI;
-  // console.log("My url is", uri);
-  // const client = new MongoClient(uri);
-
-  // await client.connect();
-  // const db = client.db("fsv-db");
 
   app.use("/images", express.static(path.join(__dirname, "../assets")));
 
@@ -42,17 +37,20 @@ async function start() {
   );
 
   app.get("/api/products", async (req, res) => {
-    const products = await db.collection("products").find({}).toArray();
+    const database = await db();
+    const products = await database.collection("products").find({}).toArray();
     res.send(products);
   });
 
   async function populateCartIds(ids) {
+    const database = await db();
     return Promise.all(
       ids.map((id) => db.collection("products").findOne({ id }))
     );
   }
 
   app.get("/api/users/:userId/cart", async (req, res) => {
+    const database = await db();
     const userId = req.params.userId;
 
     const user = await db.collection("users").findOne({ id: userId });
@@ -61,6 +59,7 @@ async function start() {
   });
 
   app.get("/api/products/:productId", async (req, res) => {
+    const database = await db();
     const productId = req.params.productId;
     const product = await db.collection("products").findOne({ id: productId });
     res.json(product);
@@ -68,6 +67,7 @@ async function start() {
 
   // Adding item to cart
   app.post("/api/users/:userId/cart", async (req, res) => {
+    const database = await db();
     const userId = req.params.userId;
     const productId = req.body.id;
 
@@ -93,6 +93,7 @@ async function start() {
   });
 
   app.delete("/api/users/:userId/cart/:productId", async (req, res) => {
+    const database = await db();
     const productId = req.params.productId;
     const userId = req.params.userId;
 
