@@ -13,18 +13,20 @@ async function start() {
 
   const port = process.env.PORT || 8000;
 
-  const db = async () => {
+  let database;
+
+  const connectDB = async () => {
     try {
       const client = await new MongoClient(process.env.MONGODB_URI).connect();
-
-      const database = client.db("fsv-db");
+      database = client.db("fsv-db");
       console.log("MongoDB Connected");
-      return database;
     } catch (error) {
       console.log("Error connecting to MongoDb", error);
       process.exit(1);
     }
   };
+
+  await connectDB();
 
   app.use("/images", express.static(path.join(__dirname, "../assets")));
 
@@ -37,20 +39,17 @@ async function start() {
   );
 
   app.get("/api/products", async (req, res) => {
-    const database = await db();
     const products = await database.collection("products").find({}).toArray();
     res.send(products);
   });
 
   async function populateCartIds(ids) {
-    const database = await db();
     return Promise.all(
       ids.map((id) => database.collection("products").findOne({ id }))
     );
   }
 
   app.get("/api/users/:userId/cart", async (req, res) => {
-    const database = await db();
     const userId = req.params.userId;
 
     const user = await database.collection("users").findOne({ id: userId });
@@ -59,7 +58,6 @@ async function start() {
   });
 
   app.get("/api/products/:productId", async (req, res) => {
-    const database = await db();
     const productId = req.params.productId;
     const product = await database
       .collection("products")
@@ -69,7 +67,6 @@ async function start() {
 
   // Adding item to cart
   app.post("/api/users/:userId/cart", async (req, res) => {
-    const database = await db();
     const userId = req.params.userId;
     const productId = req.body.id;
 
@@ -101,7 +98,6 @@ async function start() {
   });
 
   app.delete("/api/users/:userId/cart/:productId", async (req, res) => {
-    const database = await db();
     const productId = req.params.productId;
     const userId = req.params.userId;
 
