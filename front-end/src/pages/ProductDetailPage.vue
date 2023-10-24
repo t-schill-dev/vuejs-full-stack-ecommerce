@@ -53,12 +53,6 @@ export default {
     }
   },
   methods: {
-    // async fetchCartItems(userId){
-    //   const cartRes = await axios.get(`/api/users/${userId}/cart`);
-    //   console.log('cartRes.data:', cartRes.data);
-    //   const cartItems = cartRes.data;
-    //   this.cartItems = cartItems;
-    // },
     async addToCart() {
       await axios.post(`/api/users/${this.user.uid}/cart`, {id: this.$route.params.productId});
       alert("Successfully added item to cart");
