@@ -21,7 +21,7 @@ async function start() {
       console.log("MongoDB Connected");
       return database;
     } catch (error) {
-      console.log(error);
+      console.log("Error connecting to MongoDb", error);
       process.exit(1);
     }
   };
@@ -45,7 +45,7 @@ async function start() {
   async function populateCartIds(ids) {
     const database = await db();
     return Promise.all(
-      ids.map((id) => db.collection("products").findOne({ id }))
+      ids.map((id) => database.collection("products").findOne({ id }))
     );
   }
 
@@ -53,7 +53,7 @@ async function start() {
     const database = await db();
     const userId = req.params.userId;
 
-    const user = await db.collection("users").findOne({ id: userId });
+    const user = await database.collection("users").findOne({ id: userId });
     const populatedCart = await populateCartIds(user?.cartItems || []);
     res.json(populatedCart);
   });
@@ -61,7 +61,9 @@ async function start() {
   app.get("/api/products/:productId", async (req, res) => {
     const database = await db();
     const productId = req.params.productId;
-    const product = await db.collection("products").findOne({ id: productId });
+    const product = await database
+      .collection("products")
+      .findOne({ id: productId });
     res.json(product);
   });
 
@@ -77,17 +79,23 @@ async function start() {
       return;
     }
 
-    const existingUser = await db.collection("users").findOne({ id: userId });
+    const existingUser = await database
+      .collection("users")
+      .findOne({ id: userId });
 
     if (!existingUser) {
-      await db.collection("users").insertOne({ id: userId, cartItems: [] });
+      await database
+        .collection("users")
+        .insertOne({ id: userId, cartItems: [] });
     } else {
-      await db
+      await database
         .collection("users")
         .updateOne({ id: userId }, { $addToSet: { cartItems: productId } });
     }
 
-    const updatedUser = await db.collection("users").findOne({ id: userId });
+    const updatedUser = await database
+      .collection("users")
+      .findOne({ id: userId });
     const populatedCart = await populateCartIds(updatedUser?.cartItems || []);
     res.json(populatedCart);
   });
@@ -97,11 +105,13 @@ async function start() {
     const productId = req.params.productId;
     const userId = req.params.userId;
 
-    await db
+    await database
       .collection("users")
       .updateOne({ id: userId }, { $pull: { cartItems: productId } });
 
-    const updatedUser = await db.collection("users").findOne({ id: userId });
+    const updatedUser = await database
+      .collection("users")
+      .findOne({ id: userId });
     const populatedCart = await populateCartIds(updatedUser?.cartItems || []);
     res.json(populatedCart);
   });
